@@ -5,11 +5,13 @@ import com.udacity.jdnd.course3.critter.pet.PetNotFoundException;
 import com.udacity.jdnd.course3.critter.pet.PetRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CustomerService {
 
@@ -31,15 +33,12 @@ public class CustomerService {
     public CustomerDTO save(final CustomerDTO customer) {
         final Customer toSaveCustomer = customerDTOToCustomerConverter.convert(customer);
 
-        final Customer savedCustomer;
         if (toSaveCustomer.getId() != null) {
-            savedCustomer = customerRepository.findById(toSaveCustomer.getId())
-                    .map(customerRepository::save)
+            customerRepository.findById(toSaveCustomer.getId())
                     .orElseThrow(CustomerNotFoundException::new);
         }
-        else {
-            savedCustomer = customerRepository.save(toSaveCustomer);
-        }
+
+        final Customer savedCustomer = customerRepository.save(toSaveCustomer);
 
         return customerToCustomerDTOConverter.convert(savedCustomer);
     }

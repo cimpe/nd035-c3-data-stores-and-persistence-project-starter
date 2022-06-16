@@ -2,6 +2,7 @@ package com.udacity.jdnd.course3.critter.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class EmployeeService {
 
@@ -27,15 +29,12 @@ public class EmployeeService {
     public EmployeeDTO save(final EmployeeDTO employee) {
         final Employee toSaveEmployee = employeeDTOToEmployeeConverter.convert(employee);
 
-        final Employee savedEmployee;
         if (toSaveEmployee.getId() != null) {
-            savedEmployee = employeeRepository.findById(toSaveEmployee.getId())
-                    .map(employeeRepository::save)
+            employeeRepository.findById(toSaveEmployee.getId())
                     .orElseThrow(EmployeeNotFoundException::new);
         }
-        else {
-            savedEmployee = employeeRepository.save(toSaveEmployee);
-        }
+
+        final Employee savedEmployee = employeeRepository.save(toSaveEmployee);
 
         return employeeToEmployeeDTOConverter.convert(savedEmployee);
     }

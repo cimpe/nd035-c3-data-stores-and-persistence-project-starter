@@ -10,7 +10,7 @@ final class CustomerDTOToCustomerConverter implements Converter<CustomerDTO, Cus
     @Override
     public Customer convert(final CustomerDTO customerDTO) {
         final Customer customer = new Customer();
-        BeanUtils.copyProperties(customerDTO, customer, "id");
+        BeanUtils.copyProperties(customerDTO, customer);
 
         return customer;
     }

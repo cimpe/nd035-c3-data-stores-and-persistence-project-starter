@@ -13,7 +13,7 @@ final class EmployeeDTOToEmployeeConverter implements Converter<EmployeeDTO, Emp
     @Override
     public Employee convert(final EmployeeDTO employeeDTO) {
         final Employee employee = new Employee();
-        BeanUtils.copyProperties(employeeDTO, employee, "id");
+        BeanUtils.copyProperties(employeeDTO, employee);
 
         final Set<EmployeeSkill> skills = employeeDTO.getSkills();
         if (skills != null) {
